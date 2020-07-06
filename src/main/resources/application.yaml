@@ -1,0 +1,12 @@
+quarkus:
+
+  datasource:
+    db-kind: mysql
+    username: todo
+    password: todo
+    jdbc:
+      url: jdbc:mysql://localhost:3306/todo
+
+  hibernate-orm:
+    database:
+      generation: drop-and-create

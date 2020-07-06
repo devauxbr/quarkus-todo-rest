@@ -1,0 +1,16 @@
+version: "2.4"
+services:
+  mysql:
+    image: mysql
+    restart: unless-stopped
+    container_name: todo-db
+    ports:
+    - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      # ultra insecured passwords !
+      MYSQL_DATABASE: todo
+      MYSQL_USER: todo
+      MYSQL_PASSWORD: todo
+      MYSQL_ROOT_PASSWORD: admin
