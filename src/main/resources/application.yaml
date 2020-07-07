@@ -9,4 +9,7 @@ quarkus:
 
   hibernate-orm:
     database:
-      generation: drop-and-create
+      generation: none
+
+  flyway:
+    migrate-at-start: true

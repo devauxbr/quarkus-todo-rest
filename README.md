@@ -25,7 +25,8 @@ You can see the database logs with:
 ```bash
 docker logs -f todo-db
 ```
-Once the database is ready (i.e. when the logs says `[...] /usr/sbin/mysqld: ready for connections. [...]`) start the app
+Once the database is ready (i.e. when the logs say `[...] /usr/sbin/mysqld: ready for connections. [...]`, this might
+take few seconds on first startup), start the app
 by running this command in another terminal (still in the root directory of this repository) :
 ```bash
 ./mvnw clean compile quarkus:dev
@@ -34,7 +35,7 @@ by running this command in another terminal (still in the root directory of this
 This will start the app in `dev-mode`, meaning any change to the Java code or configuration will trigger a hot reload on
 the next incomming HTTP request.
 
-**WARNING:** your DB will be cleared on each hot reload ! 
+Flyway will bootstrap the database schema on first start.
 
 # Usage
 
