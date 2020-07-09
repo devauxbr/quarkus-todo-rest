@@ -19,13 +19,6 @@ public class TodoResource {
     @Inject
     TodoService service;
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Todo create(Todo todo) {
-        return service.create(todo);
-    }
-
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Todo todo) {
@@ -43,12 +36,6 @@ public class TodoResource {
     @Path("/{id}/done")
     public void setDone(@PathParam("id") Long id) {
         service.setDone(id);
-    }
-
-    @DELETE
-    @Path("/{id}")
-    public void delete(@PathParam("id") Long id) {
-        repository.deleteById(id);
     }
 
     @GET

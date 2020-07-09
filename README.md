@@ -16,7 +16,7 @@ guidelines from Robert C. Martin.
 
 # Run
 
-First, in the root directory of this repository, start the local MySQL database with this command :
+First, in the root directory of this repository, start the local MySQL database and Keycloak instance with this command :
 ```bash
 docker-compose up -d
 ```
@@ -37,22 +37,29 @@ the next incomming HTTP request.
 
 Flyway will bootstrap the database schema on first start.
 
+Lastly, configure the Keycloak instance following configuration steps from the official 
+[Quarkus OIDC guide](https://quarkus.io/guides/security-openid-connect#starting-and-configuring-the-keycloak-server).
+Skip the `docker run` step, just access the Keycloak Administration Console and import the provided realm configuration file
+(click on "Add realm", then import the file).
+Make sure to [export the **access_token** environement variable](https://quarkus.io/guides/security-openid-connect#testing-the-application)
+before executing the commands in the next paragraphs.
+
 # Usage
 
 ## Create
 
 ```bash
-curl -H "Content-Type: application/json" --request POST -d '{"title":"test1", "description": "description1"}' http://localhost:8080/todo
+curl -H "Content-Type: application/json" -H "Authorization: Bearer $access_token" --request POST -d '{"title":"test1", "description": "description1"}' http://localhost:8080/admin/todo
 ```
 Expected output :
 ```json
-{"id":1,"title":"test1","description":"description1","expireAt":null,"createdAt":1594075831309,"updatedAt":null,"doneAt":null,"version":null}
+{"id":0,"title":"test1","description":"description1","expireAt":null,"createdAt":1594075831309,"updatedAt":null,"doneAt":null,"version":null}
 ```
 
 ## Update
 
 ```bash
-curl -H "Content-Type: application/json" --request PUT -d '{"id": 1, "title":"changedTitle", "description": "changedUpdate"}' http://localhost:8080/todo
+curl -H "Content-Type: application/json" --request PUT -d '{"id": 0, "title":"changedTitle", "description": "changedUpdate"}' http://localhost:8080/todo
 ```
 No output expected if update succeeds.
 
@@ -63,13 +70,13 @@ curl http://localhost:8080/todo
 ```
 Expected output :
 ```json
-[{"id":1,"title":"changedTitle","description":"changedUpdate","expireAt":null,"createdAt":1594076056491,"updatedAt":null,"doneAt":null,"version":null}]
+[{"id":0,"title":"changedTitle","description":"changedUpdate","expireAt":null,"createdAt":1594076056491,"updatedAt":null,"doneAt":null,"version":null}]
 ```
 
 ## Get Todo by ID
 
 ```bash
-curl http://localhost:8080/todo/1
+curl http://localhost:8080/todo/0
 ```
 Expected output :
 ```json
@@ -79,20 +86,20 @@ Expected output :
 ## Set expiryAt date
 
 ```bash
-curl -H "Content-Type: application/json" --request PUT -d '{"expireAt": 159407605491}' http://localhost:8080/todo/expire/1
+curl -H "Content-Type: application/json" --request PUT -d '{"expireAt": 159407605491}' http://localhost:8080/todo/0/expire
 ```
 No output expected if update succeeds.
 
 ## Set done
 
 ```bash
-curl --request PUT http://localhost:8080/todo/1/done 
+curl --request PUT http://localhost:8080/todo/0/done 
 ```
 No output expected if update succeeds.
 
 ## Delete
 
 ```bash
-curl --request DELETE  http://localhost:8080/todo/1 
+curl --request DELETE -H "Authorization: Bearer $access_token" http://localhost:8080/admin/todo/0 
 ```
 No output expected if update succeeds.
